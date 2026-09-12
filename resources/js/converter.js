@@ -256,6 +256,11 @@ if (dropzone) {
         if (!data.available) {
             show(resultPanel, false)
             resultPlayer.removeAttribute('src')
+
+            // An expired result must not leave a clickable link behind: the
+            // browser would save the HTML error answer as a bogus file.
+            document.getElementById('result-download').removeAttribute('href')
+
             show(resultMissing, true)
             return
         }
@@ -266,6 +271,13 @@ if (dropzone) {
         document.getElementById('result-original-duration').textContent = data.original_duration ?? '—'
         document.getElementById('result-duration').textContent = data.result_duration ?? '—'
         document.getElementById('result-download-label').textContent = `Download ${data.output_format}`
+
+        // The anchor ships as <a href="#" download>. Without this assignment the
+        // green button never pointed at the result: it saved the surrounding
+        // HTML page (a ~1.3 kB .htm) instead of the OGG, while the player next
+        // to it worked because it did get download_url.
+        document.getElementById('result-download').href = data.download_url
+
         resultPlayer.src = data.download_url
         show(resultMissing, false)
         show(resultPanel, true)
