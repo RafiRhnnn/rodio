@@ -1,0 +1,51 @@
+diag2 2026-09-12T21:36:43+00:00
+php processes = 5
+  "php.exe","12008","Console","1","15.768 K"
+  "php.exe","13496","Console","1","30.408 K"
+  "php.exe","6556","Console","1","60.648 K"
+  "php.exe","15752","Console","1","54.420 K"
+  "php.exe","6980","Console","1","42.900 K"
+command lines:
+  CommandLine=php  artisan serve
+  CommandLine=php  artisan queue:work --queue=audio-conversions --tries=3 --timeout=600 -vvv
+-- conversions, untruncated
+#6 created=2026-09-12 21:35:27 status=queued attempts=0 started=- failed=-
+   original_path=uploads/6b464a6f-738a-4873-b3a7-32ff5109288f.m4a
+   output_path=-
+   error=NULL
+#5 created=2026-09-12 21:30:12 status=queued attempts=0 started=- failed=-
+   original_path=uploads/5733c0de-fe2f-4b60-9d56-61720cdbb53f.m4a
+   output_path=-
+   error=NULL
+#4 created=2026-09-12 21:28:07 status=processing attempts=1 started=2026-09-12 21:36:42 failed=-
+   original_path=uploads/e6e7210b-0af9-42c0-93df-c7c80c61628a.m4a
+   output_path=-
+   error=NULL
+#3 created=2026-09-12 21:21:26 status=completed attempts=1 started=2026-09-12 21:36:41 failed=-
+   original_path=-
+   output_path=converted/3/1f3cf08d-4b50-45b4-a1cf-e4cc8b0aa614.ogg
+   error=NULL
+#2 created=2026-09-12 20:41:23 status=completed attempts=1 started=2026-09-12 21:36:39 failed=-
+   original_path=-
+   output_path=converted/2/4e08b39f-2a14-4c75-a81a-e586f69654ea.ogg
+   error=NULL
+-- jobs = 3
+   id=4 queue=audio-conversions attempts=1 available_at=2026-09-12T21:28:07+00:00
+   id=5 queue=audio-conversions attempts=0 available_at=2026-09-12T21:30:12+00:00
+   id=6 queue=audio-conversions attempts=0 available_at=2026-09-12T21:35:27+00:00
+-- failed_jobs = 0
+-- non-testing log lines = 13 (of 2504)
+   [2026-09-12 16:23:33] local.ERROR: No application encryption key has been specified. {"exception":"[object] (Illuminate\\Encryption\\MissingAppKeyException(code: 0): No application encryption key has been specified. at C:/laragon/www/convertaudio/vendor/laravel/framework/src/Illuminate/Encryption/EncryptionServiceProvider.php:83) 
+   [2026-09-12 16:23:34] local.ERROR: No application encryption key has been specified. {"exception":"[object] (Illuminate\\Encryption\\MissingAppKeyException(code: 0): No application encryption key has been specified. at C:/laragon/www/convertaudio/vendor/laravel/framework/src/Illuminate/Encryption/EncryptionServiceProvider.php:83) 
+   [2026-09-12 16:23:35] local.ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at C:\laragon\www\convertaudio\vendor\symfony\http-foundation\Response.php:393) in C:\laragon\www\convertaudio\vendor\symfony\http-foundation\Response.php:328 
+   [2026-09-12 17:34:38] local.ERROR: The "--columns" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--columns\" option does not exist. at C:/laragon/www/convertaudio/vendor/symfony/console/Input/ArgvInput.php:226) 
+   [2026-09-12 17:53:10] local.ERROR: Unmatched '}' {"exception":"[object] (ParseError(code: 0): Unmatched '}' at C:/laragon/www/convertaudio/routes/web.php:48) 
+   [2026-09-12 17:53:12] local.ERROR: Unmatched '}' {"exception":"[object] (ParseError(code: 0): Unmatched '}' at C:/laragon/www/convertaudio/routes/web.php:48) 
+   [2026-09-12 18:34:33] local.ERROR: require(C:\laragon\www\convertaudio\bootstrap/../routes/web.php): Failed to open stream: No such file or directory {"exception":"[object] (ErrorException(code: 0): require(C:\\laragon\\www\\convertaudio\\bootstrap/../routes/web.php): Failed to open stream: No such file or directory at C:/laragon/www/convertaudio/vendor/laravel/framework/src/Illuminate/Routing/RouteFileRegistrar.php:34) 
+   [2026-09-12 18:34:41] local.ERROR: require(C:\laragon\www\convertaudio\bootstrap/../routes/web.php): Failed to open stream: No such file or directory {"exception":"[object] (ErrorException(code: 0): require(C:\\laragon\\www\\convertaudio\\bootstrap/../routes/web.php): Failed to open stream: No such file or directory at C:/laragon/www/convertaudio/vendor/laravel/framework/src/Illuminate/Routing/RouteFileRegistrar.php:34) 
+   [2026-09-12 18:34:41] local.ERROR: require(C:\laragon\www\convertaudio\bootstrap/../routes/web.php): Failed to open stream: No such file or directory {"exception":"[object] (ErrorException(code: 0): require(C:\\laragon\\www\\convertaudio\\bootstrap/../routes/web.php): Failed to open stream: No such file or directory at C:/laragon/www/convertaudio/vendor/laravel/framework/src/Illuminate/Routing/RouteFileRegistrar.php:34) 
+   [2026-09-12 18:44:58] local.ERROR: Method Illuminate\Console\Scheduling\Event::thenPush does not exist. {"exception":"[object] (BadMethodCallException(code: 0): Method Illuminate\\Console\\Scheduling\\Event::thenPush does not exist. at C:/laragon/www/convertaudio/vendor/laravel/framework/src/Illuminate/Macroable/Traits/Macroable.php:117) 
+   [2026-09-12 18:45:41] local.ERROR: Method Illuminate\Console\Scheduling\Event::thenPush does not exist. {"exception":"[object] (BadMethodCallException(code: 0): Method Illuminate\\Console\\Scheduling\\Event::thenPush does not exist. at C:/laragon/www/convertaudio/vendor/laravel/framework/src/Illuminate/Macroable/Traits/Macroable.php:117) 
+   [2026-09-12 18:45:41] local.ERROR: Method Illuminate\Console\Scheduling\Event::thenPush does not exist. {"exception":"[object] (BadMethodCallException(code: 0): Method Illuminate\\Console\\Scheduling\\Event::thenPush does not exist. at C:/laragon/www/convertaudio/vendor/laravel/framework/src/Illuminate/Macroable/Traits/Macroable.php:117) 
+   [2026-09-12 19:43:42] local.ERROR: The "--columns" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--columns\" option does not exist. at C:/laragon/www/convertaudio/vendor/symfony/console/Input/ArgvInput.php:226) 
+QUEUE_CONNECTION env='database' config=database | SESSION_LIFETIME=120
