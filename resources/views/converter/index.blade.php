@@ -90,7 +90,10 @@
                                     <span class="text-xs text-indigo-600">rekomendasi default</span>
                                 @endif
                             </span>
-                            <span class="text-sm font-semibold text-slate-700">{{ number_format($preset['value'], 1, ',', '.') }}x</span>
+                            <span class="text-right">
+                                <span class="block text-sm font-semibold text-slate-700">{{ number_format($preset['value'], 1, ',', '.') }}x</span>
+                                <span class="block text-xs font-medium text-slate-500">{{ number_format($preset['gain_db'], 0, ',', '.') }} dB</span>
+                            </span>
                             <input type="radio" name="speed" value="{{ $preset['value'] }}" class="sr-only"
                                    @checked((float) $preset['value'] === (float) config('audio.speed.default'))>
                         </label>
@@ -123,14 +126,11 @@
                 <dl class="mt-4 space-y-2 text-sm">
                     <div class="flex justify-between gap-3"><dt class="text-slate-500">File</dt><dd class="max-w-[10rem] truncate font-medium text-slate-900" id="summary-file">Belum ada file</dd></div>
                     <div class="flex justify-between gap-3"><dt class="text-slate-500">Kecepatan</dt><dd class="font-medium text-slate-900" id="summary-speed">2.3x</dd></div>
-                    <div class="flex justify-between gap-3"><dt class="text-slate-500">Pitch</dt><dd class="font-medium text-slate-900" id="summary-pitch">Dipertahankan</dd></div>
+                    <div class="flex justify-between gap-3"><dt class="text-slate-500">Amplifikasi</dt><dd class="font-medium text-slate-900" id="summary-gain">-8 dB</dd></div>
+                    <div class="flex justify-between gap-3"><dt class="text-slate-500">Pitch</dt><dd class="font-medium text-slate-900" id="summary-pitch">Tidak dipertahankan</dd></div>
                 </dl>
 
-                <label class="mt-5 flex cursor-pointer items-center gap-3 rounded-xl bg-slate-50 px-4 py-3 text-sm text-slate-700">
-                    <input id="preserve-pitch" type="checkbox" value="1" checked
-                           class="size-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-600">
-                    Preserve Pitch
-                </label>
+                <p class="mt-3 text-xs text-slate-500">Pitch tidak dipertahankan (mengikuti kecepatan)</p>
 
                 <button type="button" id="convert-button" disabled
                         class="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-500 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none">

@@ -15,7 +15,6 @@ if (dropzone) {
     const preview = document.getElementById('audio-preview')
     const convertButton = document.getElementById('convert-button')
     const customSpeed = document.getElementById('custom-speed')
-    const pitch = document.getElementById('preserve-pitch')
     const summaryFile = document.getElementById('summary-file')
     const show = (el, on) => el.classList.toggle('hidden', !on)
     let upload = null
@@ -172,25 +171,46 @@ if (dropzone) {
         handleFile(event.dataTransfer?.files?.[0])
     })
 
-    // --- speed & pitch summary ---
+    // --- speed & gain summary ---
     const summarySpeed = document.getElementById('summary-speed')
-    const summaryPitch = document.getElementById('summary-pitch')
+    const summaryGain = document.getElementById('summary-gain')
+
+    // Volume amplification follows the speed: dB = -6 - (speed - 2.1) * 10,
+    // i.e. 2.1x -> -6dB, 2.3x -> -8dB, 2.5x -> -10dB, 2.7x -> -12dB, 2.9x -> -14dB.
+    // Clamped to [-30, 0]: slower-than-preset speeds would boost past unity
+    // (0.5x -> +10dB) which can clip. The same clamping lives in PHP
+    // (AudioConversionService::amplificationDb), so preview matches FFmpeg.
+    const gainFromSpeed = (speed) => {
+        const raw = Math.round((-6 - (speed - 2.1) * 10) * 10) / 10
+        return Math.max(-30, Math.min(0, raw))
+    }
+    const humanGain = (gain) => `${gain} dB`
 
     const summarise = () => {
         const checked = document.querySelector('input[name="speed"]:checked')
         const custom = parseFloat(customSpeed.value)
+        let speed = 0
 
         if (Number.isFinite(custom)) {
             if (custom < config.minSpeed || custom > config.maxSpeed) {
                 summarySpeed.textContent = `Kecepatan harus ${config.minSpeed}x–${config.maxSpeed}x`
+                summaryGain.textContent = '—'
+
                 return
             }
 
-            summarySpeed.textContent = `${custom.toFixed(2).replace('.', ',')}x`
-            return
+            speed = custom
+        } else {
+            speed = checked ? parseFloat(checked.value) : 0
         }
 
-        summarySpeed.textContent = checked ? `${parseFloat(checked.value).toFixed(1).replace('.', ',')}x` : '—'
+        if (speed > 0) {
+            summarySpeed.textContent = `${speed.toFixed(2).replace('.', ',')}x`
+            summaryGain.textContent = humanGain(gainFromSpeed(speed))
+        } else {
+            summarySpeed.textContent = '—'
+            summaryGain.textContent = '—'
+        }
     }
 
     document.querySelectorAll('input[name="speed"]').forEach((radio) => radio.addEventListener('change', () => {
@@ -198,9 +218,6 @@ if (dropzone) {
         summarise()
     }))
     customSpeed.addEventListener('input', summarise)
-    pitch.addEventListener('change', () => {
-        summaryPitch.textContent = pitch.checked ? 'Dipertahankan' : 'Tidak dipertahankan'
-    })
     summarise()
 
     // --- convert (Tahap 6/8) + status polling (Tahap 10) ---
@@ -397,7 +414,6 @@ if (dropzone) {
             body: JSON.stringify({
                 speed,
                 output_format: 'ogg',
-                preserve_pitch: pitch.checked,
             }),
         }).catch(() => null)
 

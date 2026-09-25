@@ -26,3 +26,4 @@ $lines[] = 'newest js asset mtimes: '.json_encode(array_map(
 ));
 
 file_put_contents($report, implode("\n", $lines)."\n");
+2

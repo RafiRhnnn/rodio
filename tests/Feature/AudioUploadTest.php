@@ -45,7 +45,6 @@ class AudioUploadTest extends TestCase
             ->assertOk()
             ->assertSee('Upload Audio')
             ->assertSee('Browse Files')
-            ->assertSee('Preserve Pitch')
             ->assertSee('Convert Audio')
             ->assertSee('Custom Speed');
     }

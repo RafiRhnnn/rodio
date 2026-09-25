@@ -174,15 +174,44 @@ class AudioConversionService
     }
 
     /**
+     * Volume amplification based on speed.
+     *
+     * Formula: dB = -6 - (speed - 2.1) * 10
+     * Maps: 2.1 -> -6dB, 2.3 -> -8dB, 2.5 -> -10dB, 2.7 -> -12dB, 2.9 -> -14dB
+     *
+     * Clamped to [-30, 0]: slower-than-preset speeds would otherwise ask for a
+     * positive gain (0.5x would be +10dB) which can clip loud sources, and 0dB
+     * already means "unchanged". The floor is belt-and-braces for configs that
+     * widen the speed range.
+     */
+    private function amplificationDb(float $speed): float
+    {
+        $minSpeed = (float) config('audio.speed.min');
+        $maxSpeed = (float) config('audio.speed.max');
+
+        $speed = max($minSpeed, min($maxSpeed, $speed));
+
+        $db = -6 - ($speed - 2.1) * 10;
+
+        return round(max(-30.0, min(0.0, $db)), 1);
+    }
+
+    /**
      * preserve_pitch = true  -> time stretch (atempo chain, pitch unchanged).
      * preserve_pitch = false -> tape style (asetrate: pitch follows tempo).
      *
+     * Both paths now include volume amplification at the start of the chain.
      * atempo only accepts a 0.5-2.0 factor per stage, hence the chain.
      */
     public function filter(bool $preservePitch, float $speed, int $sampleRate): string
     {
+        $volumeDb = $this->amplificationDb($speed);
+        // Format with 1 decimal, then trim trailing ".0" so -8.0 -> "-8"
+        $volumeStr = rtrim(rtrim(sprintf('%.1F', $volumeDb), '0'), '.');
+        $volumePart = sprintf('volume=%sdB', $volumeStr);
+
         if (! $preservePitch && $sampleRate > 0) {
-            return sprintf('asetrate=%d*%.4F,aresample=%d', $sampleRate, $speed, $sampleRate);
+            return sprintf('%s,asetrate=%d*%.4F,aresample=%d', $volumePart, $sampleRate, $speed, $sampleRate);
         }
 
         $stages = [];
@@ -200,7 +229,7 @@ class AudioConversionService
 
         $stages[] = sprintf('atempo=%.4F', $remaining);
 
-        return implode(',', $stages);
+        return implode(',', array_merge([$volumePart], $stages));
     }
 
     /**

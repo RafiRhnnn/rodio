@@ -41,12 +41,21 @@ return [
         'default' => (float) env('AUDIO_SPEED_DEFAULT', 2.3),
         'min' => (float) env('AUDIO_SPEED_MIN', 0.5),
         'max' => (float) env('AUDIO_SPEED_MAX', 4.0),
+
+        /*
+         | Volume amplification per preset, in dB. Tied to the speed factor so
+         | the output does not get louder the faster the audio plays:
+         |   2.1x -> -6dB, 2.3x -> -8dB, 2.5x -> -10dB, 2.7x -> -12dB,
+         |   2.9x -> -14dB
+         | The FFmpeg filter for a *custom* speed is interpolated from the same
+         | linear rule (dB = -6 - (speed - 2.1) * 10).
+         */
         'presets' => [
-            ['label' => 'Lambat', 'value' => 2.1],
-            ['label' => 'Default', 'value' => 2.3],
-            ['label' => 'Cepat', 'value' => 2.5],
-            ['label' => 'Lebih Cepat', 'value' => 2.7],
-            ['label' => 'Ultra Cepat', 'value' => 2.9],
+            ['label' => 'Lambat', 'value' => 2.1, 'gain_db' => -6.0],
+            ['label' => 'Default', 'value' => 2.3, 'gain_db' => -8.0],
+            ['label' => 'Cepat', 'value' => 2.5, 'gain_db' => -10.0],
+            ['label' => 'Lebih Cepat', 'value' => 2.7, 'gain_db' => -12.0],
+            ['label' => 'Ultra Cepat', 'value' => 2.9, 'gain_db' => -14.0],
         ],
     ],
 
